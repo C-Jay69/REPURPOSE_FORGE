@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "../../lib/api";
-import { DashboardLayout } from "../../components/layout";
+import { api } from "../lib/api";
+import { DashboardLayout } from "../components/layout";
 
 type Session = {
   id: string;

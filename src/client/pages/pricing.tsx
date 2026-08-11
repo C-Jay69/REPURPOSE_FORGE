@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { DashboardLayout } from "../../components/layout";
+import { DashboardLayout } from "../components/layout";
 
 const PLAN_FEATURES: Record<string, string[]> = {
   free: ["5 repurposes/month", "12 output formats", "Brand voice training", "Copy + Markdown export"],

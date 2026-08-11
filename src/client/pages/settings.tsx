@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "../../lib/api";
-import { DashboardLayout } from "../../components/layout";
+import { api } from "../lib/api";
+import { DashboardLayout } from "../components/layout";
 
 function ToneSlider({ label, description, leftLabel, rightLabel, value, onChange }: {
   label: string;
@@ -136,7 +136,51 @@ export default function SettingsPage() {
                 <span className="text-xs px-2.5 py-1 rounded-full" style={{ background: "rgba(124,58,237,0.15)", color: "var(--accent-2)" }}>
                   {examples.filter(e => e.trim()).length}/{examples.length} filled
                 </span>
+              </div>
 
+              <div className="space-y-3">
+                {examples.map((ex, i) => (
+                  <div key={i} className="relative">
+                    <div className="flex items-start gap-2">
+                      <span
+                        className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold mt-3"
+                        style={{ background: "rgba(124,58,237,0.2)", color: "var(--accent-2)" }}
+                      >
+                        {i + 1}
+                      </span>
+                      <textarea
+                        value={ex}
+                        onChange={(e) => updateExample(i, e.target.value)}
+                        placeholder={`Example ${i + 1}: Paste a piece of your writing here...`}
+                        className="flex-1 text-sm rounded-xl p-3 resize-none transition-all"
+                        rows={3}
+                        style={{
+                          background: "var(--bg-elevated)",
+                          border: "1px solid var(--border)",
+                          color: "var(--text-primary)",
+                          fontFamily: "'Poppins', sans-serif",
+                        }}
+                        onFocus={(e) => e.target.style.borderColor = "rgba(124, 58, 237, 0.4)"}
+                        onBlur={(e) => e.target.style.borderColor = "var(--border)"}
+                      />
+                      {examples.length > 1 && (
+                        <button
+                          onClick={() => removeExample(i)}
+                          className="flex-shrink-0 mt-3 p-1.5 rounded-lg cursor-pointer transition-all"
+                          style={{ color: "var(--text-muted)", background: "none", border: "none" }}
+                          onMouseEnter={(e) => (e.currentTarget.style.color = "#ef4444")}
+                          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
 
               {examples.length < 5 && (
                 <button

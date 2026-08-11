@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "../../lib/api";
-import { DashboardLayout } from "../../components/layout";
+import { api } from "../lib/api";
+import { DashboardLayout } from "../components/layout";
 
 const ALL_FORMATS = [
   { id: "twitter_thread", label: "X Thread", color: "#1DA1F2" },
