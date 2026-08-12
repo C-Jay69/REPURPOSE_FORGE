@@ -32,6 +32,5 @@
     "src/server/**/*.ts",
     "src/client/**/*.tsx",
     "src/client/**/*.ts"
-  ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  ]
 }

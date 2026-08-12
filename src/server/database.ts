@@ -1,26 +1,28 @@
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import Database from 'better-sqlite3';
-import { migrate } from 'drizzle-orm/better-sqlite3/migration';
+import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { authSchema } from './auth-schema';
-import { repurposeSchema } from './schema';
+import * as repurposeSchema from './schema';
 import { eq } from 'drizzle-orm';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { readFileSync } from 'fs';
+import { Database } from 'bun:sqlite';
 
 // For Bun, we can use __dirname
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Create the database connection
 const sqlite = new Database(join(__dirname, '..', '..', 'sqlite.db'));
+
+// Run raw SQL migrations (bypasses drizzle migrator which needs _journal.json)
+const migrationSQL = readFileSync(join(__dirname, 'drizzle', '0001_init.sql'), 'utf-8');
+sqlite.exec(migrationSQL);
+
 export const db = drizzle(sqlite, {
   schema: {
     ...authSchema,
     ...repurposeSchema,
   },
 });
-
-// Run migrations
-migrate(db, { migrationsFolder: join(__dirname, '..', 'drizzle') });
 
 // Helper to get a user by email
 export async function getUserByEmail(email: string) {

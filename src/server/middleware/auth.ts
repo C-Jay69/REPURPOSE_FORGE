@@ -1,10 +1,9 @@
-import { HttpException } from "hono/http-exception";
+import { HTTPException } from "hono/http-exception";
 import { auth } from "../auth";
 
 export const authMiddleware = async (c, next) => {
   const session = await auth.api.getSession({
-    header: c.req.header("Authorization") ?? "",
-    cookie: c.req.header("Cookie") ?? "",
+    headers: c.req.raw.headers,
   });
 
   if (session) {
@@ -18,7 +17,7 @@ export const authMiddleware = async (c, next) => {
     if (path.startsWith("/api/auth/")) {
       await next();
     } else {
-      throw new HttpException(401, "Unauthorized");
+      throw new HTTPException(401, "Unauthorized");
     }
   }
 };

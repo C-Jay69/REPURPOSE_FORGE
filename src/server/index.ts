@@ -1,11 +1,16 @@
 import { Hono } from 'hono';
-import { cors } from 'hono/cos';
+import { cors } from 'hono/cors';
 import { auth } from './auth';
 import { authMiddleware } from './middleware/auth';
-import { repurposeRoutes } from './routes/repurpose';
-import { voiceRoutes } from './routes/voice';
-import { adminRoutes } from './routes/admin';
-import { stripeRoutes } from './routes/stripe';
+import { startJobQueue } from './lib/queue';
+import projectsRoutes from './routes/projects';
+import videosRoutes from './routes/videos';
+import analysisRoutes from './routes/analysis';
+import clipsRoutes from './routes/clips';
+import brandingRoutes from './routes/branding';
+import schedulerRoutes from './routes/scheduler';
+import stripeRoutes from './routes/stripe';
+import { storage } from './lib/storage';
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -25,10 +30,21 @@ const app = new Hono()
     if (!user) return c.json({ user: null }, 200);
     return c.json({ user }, 200);
   })
-  .route("/repurpose", repurposeRoutes)
-  .route("/voice", voiceRoutes)
-  .route("/admin", adminRoutes)
-  .route("/stripe", stripeRoutes);
+  .route("/projects", projectsRoutes)
+  .route("/videos", videosRoutes)
+  .route("/analysis", analysisRoutes)
+  .route("/clips", clipsRoutes)
+  .route("/branding", brandingRoutes)
+  .route("/scheduler", schedulerRoutes)
+  .route("/stripe", stripeRoutes)
+  .get("/files/*", async (c) => {
+    const key = c.req.param("*");
+    const data = await storage.get(key);
+    if (!data) return c.json({ error: "Not found" }, 404);
+    return new Response(data, { headers: { "Content-Type": "application/octet-stream" } });
+  });
+
+startJobQueue();
 
 export type AppType = typeof app;
 export default app;

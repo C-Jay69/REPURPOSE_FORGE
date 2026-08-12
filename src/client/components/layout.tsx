@@ -3,10 +3,10 @@ import { authClient, clearToken } from "../lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 
 const navItems = [
-  { href: "/dashboard", label: "Repurpose", icon: "���" },
-  { href: "/history", label: "History", icon: "��" },
-  { href: "/settings", label: "Brand Voice", icon: "��" },
-  { href: "/pricing", label: "Upgrade", icon: "◆" },
+  { href: "/dashboard", label: "Projects", icon: "📁" },
+  { href: "/scheduler", label: "Scheduler", icon: "📅" },
+  { href: "/settings", label: "Brand Kit", icon: "🎨" },
+  { href: "/pricing", label: "Upgrade", icon: "✨" },
 ];
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -25,7 +25,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex" style={{ background: "var(--bg-primary)" }}>
       {/* Sidebar */}
       <aside
-        className="fixed left-0 top-0 h-full w-60 flex flex-col z-20"
+        className="fixed left-0 top-0 h-full w-64 flex flex-col z-20"
         style={{ background: "var(--bg-secondary)", borderRight: "1px solid var(--border)" }}
       >
         {/* Logo */}
@@ -36,10 +36,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
                 style={{ background: "linear-gradient(135deg, #7C3AED, #A855F7)" }}
               >
-                R
+                VCF
               </div>
               <span className="font-bold text-base" style={{ color: "var(--text-primary)" }}>
-                Repurpose<span style={{ color: "var(--accent-2)" }}>AI</span>
+                Viral Clip<span style={{ color: "var(--accent-2)" }}>Forge</span>
               </span>
             </div>
           </Link>

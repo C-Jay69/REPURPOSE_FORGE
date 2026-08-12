@@ -1,8 +1,8 @@
 {
-  "name": "repurposeai",
-  "version": "0.1.0",
+  "name": "viral-clip-forge",
+  "version": "2.0.0",
   "private": true,
-  "description": "Content repurposing SaaS - Turn one input into 12 platform-native outputs",
+  "description": "Viral Clip Forge v2.0 - AI-powered video clip creation platform",
   "scripts": {
     "dev": "concurrently \"bun run dev:client\" \"bun run dev:server\"",
     "dev:client": "vite",
@@ -24,8 +24,10 @@
     "@tanstack/react-query": "^5.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "ai": "^7.0.59",
     "autoprefixer": "^10.4.12",
     "better-auth": "^0.3.0",
+    "better-sqlite3": "11",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
     "concurrently": "^7.6.0",
@@ -47,7 +49,7 @@
     "@types/bun": "^1.0.0",
     "@types/node": "^18.11.10",
     "@vitejs/plugin-react": "^6.0.5",
-    "typescript": "^4.9.3"
+    "typescript": "^5.5.0"
   },
   "engines": {
     "bun": ">=1.0.0"

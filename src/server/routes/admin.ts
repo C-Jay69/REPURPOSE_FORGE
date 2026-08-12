@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { db } from '../database';
 import { repurposeSessions, repurposeOutputs, brandVoices } from '../schema';
 import { requireAdmin } from '../middleware/admin';
-import { and, count, eq, gte, lt, sql } from 'drizzle-orm';
+import { and, eq, gte, lt, sql } from 'drizzle-orm';
 import { HTTPException } from 'hono/http-exception';
 
 const app = new Hono();
@@ -19,17 +19,17 @@ const get24HoursAgo = () => {
 
 // GET /api/admin/stats
 app.get('/stats', async (c) => {
-  const [totalUsers] = await db.select({ count: count() }).from(brandVoices);
-  const [todayUsers] = await db.select({ count: count() })
+  const [totalUsers] = await db.select({ count: sql`count(*)` }).from(brandVoices);
+  const [todayUsers] = await db.select({ count: sql`count(*)` })
     .from(brandVoices)
     .where(gte(brandVoices.updatedAt, get24HoursAgo()));
 
-  const [totalSessions] = await db.select({ count: count() }).from(repurposeSessions);
-  const [todaySessions] = await db.select({ count: count() })
+  const [totalSessions] = await db.select({ count: sql`count(*)` }).from(repurposeSessions);
+  const [todaySessions] = await db.select({ count: sql`count(*)` })
     .from(repurposeSessions)
     .where(gte(repurposeSessions.createdAt, get24HoursAgo()));
 
-  const [totalOutputs] = await db.select({ count: count() }).from(repurposeOutputs);
+  const [totalOutputs] = await db.select({ count: sql`count(*)` }).from(repurposeOutputs);
 
   return c.json({
     totalUsers: Number(totalUsers.count),
@@ -48,7 +48,7 @@ app.get('/analytics', async (c) => {
   // Sessions per day (last 7 days)
   const sessionsPerDay = await db.select({
     date: sql<string>`strftime('%Y-%m-%d', ${repurposeSessions.createdAt} / 1000)`,
-    count: count(),
+    count: sql`count(*)`,
   })
     .from(repurposeSessions)
     .where(gte(repurposeSessions.createdAt, sevenDaysAgo))
@@ -58,7 +58,7 @@ app.get('/analytics', async (c) => {
   // Signups per day (last 7 days) - using brandVoices.updatedAt as proxy for user creation
   const signupsPerDay = await db.select({
     date: sql<string>`strftime('%Y-%m-%d', ${brandVoices.updatedAt} / 1000)`,
-    count: count(),
+    count: sql`count(*)`,
   })
     .from(brandVoices)
     .where(gte(brandVoices.updatedAt, sevenDaysAgo))
@@ -68,11 +68,11 @@ app.get('/analytics', async (c) => {
   // Top formats used (all time)
   const topFormats = await db.select({
     format: repurposeOutputs.format,
-    count: count(),
+    count: sql`count(*)`,
   })
     .from(repurposeOutputs)
     .groupBy(repurposeOutputs.format)
-    .orderBy(count(repurposeOutputs.format))
+    .orderBy(sql`count(*) DESC`)
     .limit(10);
 
   return c.json({

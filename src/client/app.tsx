@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import { Route, Switch } from "wouter";
 import { RunableBadge } from "./components/runable-badge";
 import { ProtectedRoute } from "./components/protected-route";
-import IndexPage from "./pages/index";
+import LandingPage from "./pages/landing";
 import SignInPage from "./pages/sign-in";
 import SignUpPage from "./pages/sign-up";
 import DashboardPage from "./pages/dashboard";
-import HistoryPage from "./pages/history";
+import ProjectWorkspacePage from "./pages/project-workspace";
+import ClipReviewPage from "./pages/clip-review";
+import StudioPage from "./pages/studio";
+import SchedulerPage from "./pages/scheduler";
 import SettingsPage from "./pages/settings";
 import PricingPage from "./pages/pricing";
-import AdminPage from "./pages/admin";
 
 function MaintenanceBanner() {
   const [banner, setBanner] = useState<{ enabled: boolean; message: string } | null>(null);
@@ -34,18 +36,32 @@ export default function App() {
     <>
       <MaintenanceBanner />
       <Switch>
-        <Route path="/" component={IndexPage} />
+        <Route path="/" component={LandingPage} />
         <Route path="/sign-in" component={SignInPage} />
         <Route path="/sign-up" component={SignUpPage} />
-        <Route path="/admin" component={AdminPage} />
         <Route path="/dashboard">
           <ProtectedRoute>
             <DashboardPage />
           </ProtectedRoute>
         </Route>
-        <Route path="/history">
+        <Route path="/project/:projectId">
           <ProtectedRoute>
-            <HistoryPage />
+            <ProjectWorkspacePage />
+          </ProtectedRoute>
+        </Route>
+        <Route path="/project/:projectId/review">
+          <ProtectedRoute>
+            <ClipReviewPage />
+          </ProtectedRoute>
+        </Route>
+        <Route path="/studio/:clipId">
+          <ProtectedRoute>
+            <StudioPage />
+          </ProtectedRoute>
+        </Route>
+        <Route path="/scheduler">
+          <ProtectedRoute>
+            <SchedulerPage />
           </ProtectedRoute>
         </Route>
         <Route path="/settings">
